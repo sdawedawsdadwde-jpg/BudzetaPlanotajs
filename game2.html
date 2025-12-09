@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Budžeta Līdzinātājs — Game2</title>
+  <link rel="stylesheet" href="game2.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Budžeta Līdzinātājs</h1>
+      <p class="sub">Pārdali mēneša ienākumus, velkot summas uz kategorijām. Investē, taupi un izdzīvo izaicinājumu!</p>
+<a class="big-red-x-icon" href="game.html" aria-label="Go to game" title="Go to game">
+  <!-- X-only SVG using currentColor for easy tinting -->
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path d="M6.5 6.5 L17.5 17.5 M17.5 6.5 L6.5 17.5"
+          stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</a>
+      <div id="topControls">
+        <label for="difficulty">Grūtības līmenis:</label>
+        <select id="difficulty" aria-label="Grūtības līmenis">
+          <option value="easy">Viegls</option>
+          <option value="normal" selected>Vidējs</option>
+          <option value="hard">Grūts</option>
+          <option value="challenge">Izaicinājums</option>
+        </select>
+        <button id="startChallenge" class="primary">Sākt / Pārlādēt režīmu</button>
+
+        <div id="goalWrap">
+          <strong>Galvenais mērķis:</strong>
+          <div id="mainGoal">Uzkrāt kontā <span id="goalAmount">€7000</span> ceļojumam</div>
+          <div id="goalProgress" class="small muted">Progres: <span id="goalProgressValue">0%</span></div>
+        </div>
+
+        <div id="challengeInfo" class="muted small" aria-live="polite"></div>
+      </div>
+    </header>
+
+    <section id="topBar">
+      <div class="info">
+        <div>Mēneša ienākumi: <strong id="incomeDisplay">€2000</strong></div>
+        <div>Mēnesis: <strong id="month">1</strong> / <span id="monthsGoal">12</span></div>
+        <div>Nākamajai algai bonuss: <strong id="nextBonusDisplay">€0</strong></div>
+      </div>
+
+      <div class="status">
+        <div>Kontā: <strong id="walletDisplay">€0</strong></div>
+        <div>Uzkrājumi: <strong id="savingsDisplay">€0</strong></div>
+        <div>Piešķirts: <strong id="allocatedDisplay">€0</strong></div>
+        <div id="remainingBox">Atlikums: <strong id="remainingDisplay">€2000</strong></div>
+        <div class="happinessWrap">
+          <label>Prieks: <span id="happinessPct">50%</span></label>
+          <div class="hbar"><div id="happinessBar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="main">
+      <aside id="bank">
+        <h2>Naudas banka</h2>
+        <p class="muted">Velc šos "čipus" uz kategorijām. Lai investētu: izmanto invest pogas vai velc skaidru naudu uz "Investīcijas".</p>
+        <div id="chips" aria-live="polite"></div>
+
+        <div class="bankControls">
+          <label for="customAmount">Ievadi summu:</label>
+          <input id="customAmount" type="number" min="1" step="1" placeholder="€11">
+          <button id="addChip" class="primary">Pievienot</button>
+        </div>
+
+        <div class="bankControls" style="margin-top:8px;">
+          <label for="loanAmount">Paņemt kredītu:</label>
+          <input id="loanAmount" type="number" min="1" step="1" placeholder="€120">
+          <button id="takeLoanBtn" class="secondary">Paņemt kredītu</button>
+        </div>
+
+        <div class="bankLoanStatus muted small" style="margin-top:8px;">
+          <div>Kredīts: <span id="loanOutstanding">—</span></div>
+          <div>Minimālais šī mēneša maksājums: <span id="loanRequired">—</span></div>
+          <div>Līdz pilnai atmaksai: <span id="loanRemaining">—</span></div>
+          <div>Nokavēto maksājumu skaits: <span id="loanMissed">0</span></div>
+        </div>
+
+        <div class="bankInvests">
+          <h4>Investīcijas</h4>
+          <div id="investOptions" class="investOptions"></div>
+        </div>
+
+        <div class="muted small">Padoms: noklikšķini uz novietota čipa, lai to noņemtu (izņemot obligātos maksājumus). Čipiem var dot fokusu (tab) un nospiest Enter, lai klonētu.</div>
+      </aside>
+
+      <main id="space">
+        <div id="categories"></div>
+
+        <div id="controls">
+          <div class="left">
+            <button id="nextMonth" class="primary">Nākamais mēnesis →</button>
+            <button id="autoAlloc">Automātiski sadalīt</button>
+            <button id="resetAll">Atiestatīt</button>
+          </div>
+          <div class="right">
+            <div id="eventArea"><strong>Notikums:</strong> <span id="eventText">Nav</span></div>
+            <div id="message" aria-live="polite"></div>
+            <div id="challengeStatus" class="muted small"></div>
+          </div>
+        </div>
+
+        <section id="logWrap">
+          <h3>Žurnāls</h3>
+          <div id="log"></div>
+        </section>
+      </main>
+    </section>
+
+    <footer>
+      <div>Izglītojoša budžeta spēle — plāno, reaģē un mācies.</div>
+      <div><button id="downloadState" class="secondary">Lejupielādēt stāvokli</button></div>
+    </footer>
+  </div>
+
+  <!-- Invest modal overlay (hidden until needed) -->
+  <div id="investModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" inert>
+    <div class="modal-content">
+      <h3 id="investModalTitle">Investēt</h3>
+      <div id="investModalBody">
+        <div id="investTypeRow" class="row">
+          <label for="investTypeSelect">Veids</label>
+          <select id="investTypeSelect"></select>
+        </div>
+        <div class="row">
+          <label for="investAmountInput">Summa</label>
+          <input id="investAmountInput" type="number" min="1" step="1" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="investConfirm" class="primary">Apstiprināt</button>
+        <button id="investCancel">Atcelt</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="game2.js"></script>
+</body>
+</html>

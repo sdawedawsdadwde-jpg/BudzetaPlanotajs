@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="lv" data-lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Social</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/x-icon;base64,AAABAAEAICACAAAAAACoAgAAJgAAABAQAAABACAAqBAAAI4EAAAoAAAAEAAAACAAAAABACAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A">
+  <style>
+    /* Floating FAB bottom-right */
+    #fabNewPost {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 50;
+      border-radius: 999px;
+      padding: 12px 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+    @media (max-width: 640px) {
+      #fabNewPost { right: 16px; bottom: 16px; }
+    }
+  </style>
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-grid"></div>
+  <div class="layer layer-aurora"></div>
+  <canvas id="particles"></canvas>
+
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo spin">
+        <path fill="#00e5ff" d="M12 2 2 7l10 5 10-5-10-5Zm8 9-8 4-8-4v6l8 5 8-5v-6Z"/>
+      </svg>
+      <h1>Sociālie Tīkli</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html">Pārskats</a>
+      <a href="budgets.html">Mērķi</a>
+      <a href="reports.html">Pārskati</a>
+      <a href="planner.html">Plānotājs</a>
+      <a href="notes.html">Piezīmes</a>
+      <a href="social.html" class="active">Sociālie Tīkli</a>
+      <a href="settings.html">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a>
+    </nav>
+    <div class="userbox">
+      <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <input id="displayNameInput" placeholder="Display name" style="max-width:160px;">
+      <button id="saveDisplayName" class="btn small outline">Saglabāt</button>
+      <span id="userStatus" class="user"></span>
+      <button id="logoutBtn" class="btn danger small">Izrakstīties</button>
+    </div>
+  </header>
+
+  <main class="container wide with-footer">
+   <section class="card glass elevate shimmer uniform-card" id="feedSection" data-page>
+  <div class="toolbar" style="justify-content:space-between; align-items:center;">
+    <div>
+      <h2 class="title" style="margin:0;">Kopienas plūsma</h2>
+      <p class="subtitle lead" style="margin:4px 0 0;">Atver ierakstu, lai komentētu vai ziņotu.</p>
+    </div>
+  </div>
+  <div id="postList" class="goals-grid"></div>
+  <div id="emptyState" class="note" style="display:none;">Nav ierakstu.</div>
+</section>
+
+    <section class="card glass elevate shimmer uniform-card" id="composeSection" data-page style="display:none;">
+      <h3 style="margin-top:0;">Jauns ieraksts</h3>
+      <form id="postForm" class="grid-2" autocomplete="off">
+        <label class="field full">
+          <span>Nosaukums *</span>
+          <input required name="title" maxlength="120" placeholder="Nosaukums">
+        </label>
+        <label class="field full">
+          <span>Teksts (neobligāti)</span>
+          <textarea name="body" rows="3" maxlength="2000" placeholder="Saturs"></textarea>
+        </label>
+        <div class="row wrap" style="margin-top:6px;">
+          <button class="btn primary glow" type="submit">Publicēt</button>
+          <button class="btn outline" type="button" id="cancelCompose">Atcelt</button>
+          <span id="postFormHint" class="note"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="card glass elevate shimmer uniform-card" id="detailSection" data-page style="display:none;">
+      <button class="btn outline small" type="button" id="backToFeed" style="margin-bottom:12px;">← Atpakaļ</button>
+      <h3 id="detailTitle" style="margin:0 0 4px;"></h3>
+      <div class="muted small" id="detailMeta"></div>
+      <p id="detailBody" style="white-space:pre-wrap; line-height:1.5;"></p>
+      <div id="detailImages" class="ad-grid"></div>
+
+      <div class="row wrap" style="margin:12px 0; gap:8px;">
+        <button id="likePostBtn" class="btn outline small">Patīk (<span id="postLikeCount">0</span>)</button>
+        <button id="reportPostBtn" class="btn outline small">Ziņot</button>
+        <button id="deletePostBtn" class="btn danger small" style="display:none;">Dzēst</button>
+      </div>
+
+      <hr style="border-color:rgba(255,255,255,.12); margin:14px 0;">
+
+      <h4>Komentāri</h4>
+      <div id="commentList" class="list-col" style="margin-bottom:12px;"></div>
+      <div id="commentEmpty" class="note">Vēl nav komentāru.</div>
+
+      <form id="commentForm" class="row wrap" style="margin-top:12px;">
+        <input name="commentBody" placeholder="Komentārs">
+        <button class="btn primary small" type="submit">Pievienot</button>
+        <span id="commentHint" class="note"></span>
+      </form>
+    </section>
+
+    <footer class="footer global-footer">
+      <small>© <span id="yearSocial"></span><span> Matīss Gromovs</span></small>
+    </footer>
+  </main>
+
+  <!-- Floating FAB for new post -->
+  <button class="btn primary glow small" id="fabNewPost" title="Jauns ieraksts">+ Jauns ieraksts</button>
+
+  <!-- Report overlay -->
+  <div id="reportOverlay" class="system-guard-overlay" style="display:none;">
+    <div class="system-guard-box sg-warning" style="max-width:520px;">
+      <h3>Ziņot par saturu</h3>
+      <div class="system-guard-msg">
+        <div id="reportTargetInfo" class="small muted" style="margin-bottom:8px;"></div>
+        <label class="field full" style="margin:0;">
+          <span>Iemesls (līdz 500 rakstz.)</span>
+          <textarea id="reportReason" rows="3" maxlength="500" placeholder="Nepiemērots / spam / aizvainojošs"></textarea>
+        </label>
+      </div>
+      <div class="system-guard-actions">
+        <button id="reportCancel" class="close">Atcelt</button>
+        <button id="reportSubmit" class="primary">Iesniegt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts at bottom -->
+  <script>
+    document.getElementById('yearSocial').textContent = new Date().getFullYear();
+  </script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+ <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+    <script type="module" src="guards.js"></script>
+     <script type="module" src="social.js"></script>
+</body>
+</html> 

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kursora labirints</title>
+  <link rel="stylesheet" href="game1.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Kursora labirints</h1>
+    
+    <p class="instructions">
+     Noklikšķiniet uz "Sākt", novietojiet kursoru virs mazā zaļā "Sākt" lodziņa un uzmanīgi virziet kursoru uz zilo "Mērķi".
+Labirints spēles laikā lēnām sarūks, koridori ir šauri un pilni ar asiem pagriezieniem.
+    </p>
+<a class="big-red-x-icon" href="game.html" aria-label="Go to game" title="Go to game">
+  <!-- X-only SVG using currentColor for easy tinting -->
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path d="M6.5 6.5 L17.5 17.5 M17.5 6.5 L6.5 17.5"
+          stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</a>
+    <div class="hud">
+      <button id="startBtn">Sākt</button>
+      <span>Sadursmes: <span id="collisions">0</span></span>
+      <span id="message" class="msg"></span>
+    </div>
+
+    <div id="mazeWrap">
+      <div id="maze" class="maze" tabindex="0" aria-label="Maze area">
+        <!-- Start and Goal -->
+        <div id="start" class="start">Sākt</div>
+        <div id="goal" class="goal">Mērķis</div>
+
+        <!-- Dense, narrow-turn maze walls -->
+        <div class="wall w1"></div>
+        <div class="wall w2"></div>
+        <div class="wall w3"></div>
+        <div class="wall w4"></div>
+        <div class="wall w5"></div>
+        <div class="wall w6"></div>
+        <div class="wall w7"></div>
+        <div class="wall w8"></div>
+        <div class="wall w9"></div>
+        <div class="wall w10"></div>
+        <div class="wall w11"></div>
+        <div class="wall w12"></div>
+        <div class="wall w13"></div>
+        <div class="wall w14"></div>
+        <div class="wall w15"></div>
+        <div class="wall w16"></div>
+        <div class="wall w17"></div>
+        <div class="wall w18"></div>
+        <div class="wall w19"></div>
+        <div class="wall w20"></div>
+        <div class="wall w21"></div>
+        <div class="wall w22"></div>
+        <div class="wall w23"></div>
+        <div class="wall w24"></div>
+        <div class="wall w25"></div>
+        <div class="wall w26"></div>
+        <div class="wall w27"></div>
+        <div class="wall w28"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jumpscare overlay (hidden until triggered) -->
+  <div id="jumpscareOverlay" class="overlay hidden" role="dialog" aria-hidden="true">
+    <img id="jumpscareImg" src="assets/scary_face.png" alt="Jumpscare - click to close" />
+  </div>
+
+  <!-- Win overlay -->
+  <div id="winOverlay" class="overlay hidden" role="status" aria-hidden="true">
+    <div class="winBox">
+      <h2>Tu uzvarēji!</h2>
+      <button id="winClose">Aizvērt</button>
+    </div>
+  </div>
+
+  <audio id="jumpsound" src="assets/scream.mp3" preload="auto"></audio>
+
+  <script src="game1.js"></script>
+</body>
+</html>

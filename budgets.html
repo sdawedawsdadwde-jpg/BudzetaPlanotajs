@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="lv" data-lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title data-i18n="goals_title">Budžeta Mērķi</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-aurora"></div>
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo"><path fill="#ffc971" d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm1 14.93V13h4.07A6.016 6.016 0 0 1 13 16.93ZM13 11V7.07A6.016 6.016 0 0 1 17.07 11H13ZM11 7.07V11H6.93A6.016 6.016 0 0 1 11 7.07ZM6.93 13H11v3.93A6.016 6.016 0 0 1 6.93 13Z"/></svg>
+      <h1 data-i18n="nav_goals">Mērķi</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" data-i18n="nav_dashboard">Pārskats</a>
+      <a href="budgets.html" class="active" data-i18n="nav_goals">Mērķi</a>
+      <a href="reports.html" data-i18n="nav_reports">Pārskati</a>
+      <a href="planner.html" data-i18n="nav_planner">Plānotājs</a>
+      <a href="notes.html" data-i18n="nav_notes">Piezīmes</a>
+      <a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html" data-i18n="nav_settings">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a> 
+    </nav>
+    <div class="userbox">
+      <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail"></span>
+      <button id="logoutBtn" class="btn danger small" data-i18n="logout_btn">Izrakstīties</button>
+    </div>
+  </header>
+  <main class="container wide with-footer">
+    <section class="card glass elevate shimmer uniform-card">
+      <h2 data-i18n="new_goal_heading">Jauns Budžeta Mērķis</h2>
+      <form id="budgetForm" class="grid-3">
+        <label class="field"><span data-i18n="field_category">Kategorija</span>
+          <select id="bCategory" required></select>
+        </label>
+        <label class="field"><span data-i18n="field_limit_month">Mēneša Limits</span>
+          <input type="number" id="bLimit" min="1" step="0.01" required>
+        </label>
+        <label class="field"><span data-i18n="field_notes">Piezīmes</span>
+          <input type="text" id="bNotes" placeholder="Papildus">
+        </label>
+        <button class="btn primary glow full" type="submit" data-i18n="btn_add_goal">Pievienot Mērķi</button>
+      </form>
+    </section>
+<br>
+    <section class="card glass elevate uniform-card">
+      <h2 data-i18n="active_goals">Aktīvie Budžeta Limiti</h2>
+      <div id="budgetList" class="goals-grid"></div>
+    </section>
+<br>
+
+    <section class="card glass elevate uniform-card">
+      <h2>Ietaupījumu / Parādu mērķi</h2>
+      <form id="goalForm" class="grid-3">
+        <label class="field">
+          <span>Veids</span>
+          <select id="goalType" required>
+            <option value="savings">Ietaupījums</option>
+            <option value="debt">Parāds</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Nosaukums</span>
+          <input id="goalName" type="text" required placeholder="Ceļojums / Kredīts">
+        </label>
+        <label class="field">
+          <span>Mērķa summa</span>
+          <input id="goalTarget" type="number" min="1" step="0.01" required placeholder="1000">
+        </label>
+        <label class="field">
+          <span>Pašreizējais progress</span>
+          <input id="goalCurrent" type="number" min="0" step="0.01" placeholder="0">
+        </label>
+        <button class="btn primary glow full" type="submit">Pievienot mērķi</button>
+      </form>
+      <div id="goalsList" class="goals-grid" style="margin-top:14px;"></div>
+    </section>
+
+    <footer class="footer global-footer">
+      <small>© <span id="yearBud"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('yearBud').textContent = new Date().getFullYear()
+  </script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+   <script type="module" src="guards.js"></script>
+  <script type="module" src="budgets.js"></script>
+</body>
+</html>

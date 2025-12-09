@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Investīciju simulators</title>
+  <link rel="stylesheet" href="game4.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Investīciju simulators</h1>
+      <p class="subtitle">Auto-simulācija katru sekundi. Nepieciešams izdzīvot un sasniegt mērķi — nedrīksti nokļūt <span class="danger">0</span>.</p>
+    </header>
+<a class="big-red-x-icon" href="game.html" aria-label="Go to game" title="Go to game">
+  <!-- X-only SVG using currentColor for easy tinting -->
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path d="M6.5 6.5 L17.5 17.5 M17.5 6.5 L6.5 17.5"
+          stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</a>
+    <section class="top-row">
+      <div class="panel portfolio">
+        <h2>Portfelis</h2>
+        <div class="stats">
+          <div>Runda: <span id="round">0</span></div>
+          <div>Nauda: <span id="cash">€1 000.00</span></div>
+          <div>Mērķis: <span id="target">€10 000.00</span></div>
+          <div>Kopā: <span id="totalValue">€1 000.00</span></div>
+          <div>Leverage: <span id="leverageLabel">x1</span></div>
+          <div>Grūtība: <span id="difficultyLabel">Viegla</span></div>
+        </div>
+
+        <div class="controls">
+          <select id="difficulty" aria-label="Grūtība">
+            <option value="easy">Viegla (Sākums €1 000 → Mērķis €10 000)</option>
+            <option value="medium">Vidēja (Sākums €500 → Mērķis €100 000)</option>
+            <option value="hard">Grūta (Sākums €100 → Mērķis €1 000 000)</option>
+          </select>
+          <select id="leverage" aria-label="Sviras izvēle">
+            <option value="1">x1 (bez sviras)</option>
+            <option value="2">x2</option>
+            <option value="3">x3</option>
+          </select>
+          <button id="start" class="primary">Sākt spēli ▶</button>
+          <button id="pause">Pauze ⏸</button>
+          <button id="reset" class="ghost">Atiestatīt ↺</button>
+        </div>
+
+        <div id="holdingsSummary" class="holdings"></div>
+      </div>
+
+      <div class="panel invest">
+        <h2>Aktīvi un darbības</h2>
+        <div id="assetSelectorBlock">
+          <label class="muted" for="assetSelect">
+            Izvēlies aktīvus portfelim (minimums 5):</label>
+          <select id="assetSelect" multiple size="7">
+            <!-- Asset options will be auto-injected by JS -->
+          </select>
+        </div>
+        <p class="muted">Aktīvi: Bitcoin, Ethereum, WhatsApp (akcija), Zelts, Krājkonts... Vairāk nekā 20 izvēles. Tirgus mainās automātiski — izmanto pirkšanu, pārdošanu, apdrošināšanu un rebalansēšanu stratēģiski.</p>
+
+        <div id="assetsList" class="assets"></div>
+
+        <div class="action-row">
+          <button id="rebalance">Rebalansēt vienādi</button>
+          <button id="convertToCash" class="ghost">Pārdot visu → Nauda</button>
+          <button id="buyAllRisky" class="danger">Investēt visu → Riskantie</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mid-row">
+      <div class="panel info">
+        <h2>Riska un ienesīguma paskaidrojums</h2>
+        <p class="muted"><strong>Bitcoin</strong>, <strong>Ethereum</strong> u.c. — liela svārstība. <strong>Tehnoloģiju akcijas</strong> — vidēja svārstība. <strong>Zelts</strong>, <strong>Krājkonts</strong> — zems risks.</p>
+        <div class="metrics">
+          <div>Sagaidāmais atdeve (rundā): <span id="expectedReturn">0.00%</span></div>
+          <div>Portfeļa svārstība (apt.): <span id="portfolioVol">0.00%</span></div>
+          <div>Diversifikācija: <span id="diversification">0/5</span></div>
+          <div id="statusLine" class="muted"></div>
+        </div>
+      </div>
+
+      <div class="panel chart">
+        <h2>Tirgus stabiņi — pēdējās 40 rundas (viena stabiņa atspoguļo portfeļa procentuālo izmaiņu)</h2>
+        <canvas id="chart" width="860" height="260" aria-label="Grafiks"></canvas>
+      </div>
+    </section>
+
+    <section class="log panel">
+      <h2>Žurnāls</h2>
+      <ul id="logList"></ul>
+    </section>
+
+    <footer>
+      <small class="muted">Spēle automātiski simulē katru sekundi. Ja kopējā vērtība nokrīt līdz 0 vai zemāk — zaudējums un spēle tiek atiestatīta.</small>
+    </footer>
+  </main>
+
+  <script src="game4.js"></script>
+</body>
+</html>

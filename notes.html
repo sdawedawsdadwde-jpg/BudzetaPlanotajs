@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="lv" data-lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Piezīmes</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-aurora"></div>
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo"><path fill="#42f59e" d="M5 3a2 2 0 0 0-2 2v14l4-2 4 2 4-2 4 2V5a2 2 0 0 0-2-2H5Zm2 4h10v2H7V7Zm0 4h10v2H7v-2Z"/></svg>
+      <h1 data-i18n="nav_notes">Piezīmes</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" data-i18n="nav_dashboard">Pārskats</a>
+      <a href="budgets.html" data-i18n="nav_goals">Mērķi</a>
+      <a href="reports.html" data-i18n="nav_reports">Pārskati</a>
+      <a href="planner.html" data-i18n="nav_planner">Plānotājs</a>
+      <a href="notes.html" class="active" data-i18n="nav_notes">Piezīmes</a>
+   <a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html" data-i18n="nav_settings">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a>
+    </nav>
+    <div class="userbox">
+       <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail"></span>
+      <button id="logoutBtn" class="btn danger small" data-i18n="logout_btn">Izrakstīties</button>
+    </div>
+  </header>
+  <main class="container wide with-footer">
+    <section class="card glass elevate shimmer uniform-card">
+      <h2 data-i18n="new_note_heading">Jauna Piezīme</h2>
+      <form id="noteForm" class="grid-2"> 
+        <label class="field">
+          <span data-i18n="field_note_title">Nosaukums</span>
+          <input type="text" id="noteTitle" required placeholder="Ideja / Atgādinājums">
+        </label>
+        <label class="field full">
+          <span data-i18n="field_note_body">Saturs</span>
+          <textarea id="noteBody" rows="5" style="resize:vertical; background:var(--sel-bg); border:1px solid var(--sel-border); color:var(--text); padding:12px; border-radius:10px;" required></textarea>
+        </label>
+        <div class="field full">
+          <button class="btn primary glow" type="submit" data-i18n="btn_add_note">Saglabāt Piezīmi</button>
+        </div>
+      </form>
+    </section>
+<br>
+    <section class="card glass elevate uniform-card">
+      <h2 data-i18n="notes_list_heading">Manas Piezīmes</h2>
+      <div id="notesList" class="goals-grid"></div>
+    </section>
+
+<br>
+    <section class="card glass elevate uniform-card">
+      <h2>Rēķini un atgādinājumi</h2>
+      <form id="billForm" class="grid-2">
+        <label class="field">
+          <span>Nosaukums</span>
+          <input id="billName" type="text" required placeholder="Elektrība">
+        </label>
+        <label class="field">
+          <span>Summa</span>
+          <input id="billAmount" type="number" min="0" step="0.01" required placeholder="45.00">
+        </label>
+        <label class="field">
+          <span>Termiņš</span>
+          <input id="billDue" type="date" required>
+        </label>
+        <div class="field full">
+          <button class="btn primary glow" type="submit">Pievienot rēķinu</button>
+        </div>
+      </form>
+      <div id="billsList" class="list-col"></div>
+    </section>
+
+    <footer class="footer global-footer">
+      <small>© <span id="yearNotes"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('yearNotes').textContent = new Date().getFullYear()
+  </script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+   <script type="module" src="guards.js"></script>
+  <script type="module" src="notes.js"></script>
+</body>
+</html>

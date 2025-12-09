@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="lv" data-lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Budžeta Plānošana</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <a class="skip-link" href="#main" data-i18n="skip_to_content">Skip to content</a>
+  <div class="layer layer-stars"></div>
+  <canvas id="particles"></canvas>
+  <div class="layer layer-aurora"></div>
+  <main id="main" class="center-wrap">
+    <section class="card glass mega-glow entry-panel shimmer">
+      <h1 class="title xl" data-i18n="app_title">Budžeta Plānošana</h1>
+      <p class="subtitle lead" data-i18n="app_subtitle">Made by Matīss Gromovs</p>
+
+      <div class="auth-grid">
+        <form id="emailAuthForm" class="panel elevate">
+          <h2 data-i18n="login_heading">Pieteikšanās</h2>
+          <label class="field">
+            <span data-i18n="email_label">E-pasts</span>
+            <input type="email" id="email" autocomplete="email" required placeholder="tu@piemers.lv">
+          </label>
+            <label class="field">
+            <span data-i18n="password_label">Parole</span>
+            <input type="password" id="password" autocomplete="current-password" required placeholder="••••••••">
+          </label>
+          <div class="row">
+            <button type="submit" id="loginBtn" class="btn primary" data-i18n="login_btn">Ienākt</button>
+            <button type="button" id="signupBtn" class="btn outline" data-i18n="register_btn">Reģistrēties</button>
+          </div>
+          <small class="note" data-i18n="data_notice">Dati tiek glabāti droši. Nesatraucies. Nē, bet reāli.</small>
+        </form>
+<br>
+        <div class="separator"><span data-i18n="or_label">vai</span></div>
+<br>
+        <div class="panel elevate google-panel-fix">
+          <h2 data-i18n="google_fast">Ātri ar Google</h2>
+          <button id="googleBtn" class="btn google">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path fill="#EA4335" d="M12 11v3h7.1c-.3 1.9-2.1 5.5-7.1 5.5-4.3 0-7.9-3.6-7.9-8s3.6-8 7.9-8c2.4 0 4 .9 4.9 1.7l3.4-3.3C18.7.9 15.7 0 12.1 0 5.4 0 0 5.4 0 12s5.4 12 12.1 12c7 0 11.7-4.9 11.7-11.8 0-.8-.1-1.4-.2-2.2H12z"/>
+            </svg>
+            <span data-i18n="continue_google">Turpināt ar Google</span>
+          </button>
+          <small class="muted small">
+            Nestrādā lokāli
+          </small>
+        </div>
+      </div>
+      <footer class="footer global-footer">
+        <small>© <span id="year"></span><span> Matīss Gromovs</span> </small>
+      </footer>
+    </section>
+  </main>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module">
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let w,h; function resize(){ w=canvas.width=innerWidth; h=canvas.height=innerHeight; }
+    resize(); addEventListener('resize', resize);
+    const pts=[...Array(90)].map(()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+0.6,vx:(Math.random()-.5)*0.25,vy:(Math.random()-.5)*0.25,o:Math.random()*0.5+0.3}));
+    (function draw(){
+      ctx.clearRect(0,0,w,h);
+      pts.forEach(p=>{
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0||p.x>w) p.vx*=-1;
+        if(p.y<0||p.y>h) p.vy*=-1;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(255,255,255,${p.o})`; ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    })();
+  </script>
+</body>
+</html>

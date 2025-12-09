@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="lv" data-lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Iestatījumi</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Mazs vietējais stilējums toggle izskatam */
+    .perf-toggle { display:flex; align-items:center; gap:12px; }
+    .perf-toggle .switch { --w:46px; --h:26px; width:var(--w); height:var(--h); background:#333; border-radius:999px; position:relative; cursor:pointer; flex:0 0 var(--w); display:inline-block; }
+    .perf-toggle .knob { width:20px; height:20px; background:#fff; border-radius:50%; position:absolute; top:3px; left:3px; transition:all .18s ease; box-shadow:0 1px 3px rgba(0,0,0,.4); }
+    .perf-toggle.on .switch { background:#2ea44f; }
+    .perf-toggle.on .knob { left:calc(100% - 3px - 20px); transform:translateX(-2px); }
+    .perf-desc { color:var(--muted-color,#9aa0a6); font-size:0.9rem; max-width:560px }
+    @media (max-width:520px){ .perf-desc{ font-size:0.85rem } }
+    .auto-purge-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .auto-purge-row select { min-width:180px; }
+    .auto-purge-last { color:var(--muted); font-size:0.9rem; }
+  </style>
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-aurora"></div>
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo"><path fill="#ff5470" d="M12 2a3 3 0 0 1 3 3v1.07a7.002 7.002 0 0 1 3.4 1.96l1.03-.6a3 3 0 0 1 4.1 1.1 3 3 0 0 1-1.1 4.1l-1.03.6a7.014 7.014 0 0 1 0 3.92l1.03.6a3 3 0 0 1 1.1 4.1 3 3 0 0 1-4.1 1.1l-1.03-.6a7.002 7.002 0 0 1-3.4 1.96V19a3 3 0 0 1-6 0v-1.07a7.002 7.002 0 0 1-3.4-1.96l-1.03.6a3 3 0 0 1-4.1-1.1 3 3 0 0 1 1.1-4.1l1.03-.6a7.014 7.014 0 0 1 0-3.92l-1.03-.6a3 3 0 0 1-1.1-4.1 3 3 0 0 1 4.1-1.1l1.03.6A7.002 7.002 0 0 1 9 6.07V5a3 3 0 0 1 3-3Zm0 6a4 4 0 1 0 4 4 4.004 4.004 0 0 0-4-4Z"/></svg>
+      <h1 data-i18n="nav_settings">Iestatījumi</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" data-i18n="nav_dashboard">Pārskats</a>
+      <a href="budgets.html" data-i18n="nav_goals">Mērķi</a>
+      <a href="reports.html" data-i18n="nav_reports">Pārskati</a>
+      <a href="planner.html" data-i18n="nav_planner">Plānotājs</a>
+      <a href="notes.html" data-i18n="nav_notes">Piezīmes</a>
+      <a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html" class="active" data-i18n="nav_settings">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a>
+      <a href="game.html">Spēles</a>
+    </nav>
+    <div class="userbox">
+      <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail"></span>
+      <button id="logoutBtn" class="btn danger small" data-i18n="logout_btn">Izrakstīties</button> 
+    </div>
+  </header>
+  <main class="container narrow with-footer">
+    <section class="card glass elevate shimmer uniform-card">
+      <h2 data-i18n="themes_heading">Tēmas</h2>
+      <div class="theme-grid">
+        <button class="theme-btn" data-theme="theme-dark" >Zila</button>
+        <button class="theme-btn" data-theme="theme-dusk" >Violeta</button>
+        <button class="theme-btn" data-theme="theme-aurora" >Zaļa</button>
+        <button class="theme-btn" data-theme="theme-mono" >Melna</button>
+      </div>
+      <label class="field" style="margin-top:16px;">
+        <span data-i18n="accent_color_label">Akcenta Krāsa</span>
+        <input type="color" id="accentColor" value="#00e5ff">
+      </label>
+
+      <div style="margin-top:12px;">
+        <label class="field">
+          <span>Veiktspējas režīms</span>
+          <div class="perf-toggle" id="perfToggleWrap" style="margin-top:8px;">
+            <div id="lowGraphicsToggle" class="switch" role="switch" aria-checked="false">
+              <div class="knob"></div>
+            </div>
+            <div>
+              <div id="lowGraphicsTitle"><strong>Zema grafika</strong></div>
+              <div class="perf-desc">Samazina animācijas, atslēdz smagos fona efektus un filtrus, lai uzlabotu veiktspēju vāju ierīču gadījumā.</div>
+            </div>
+            <p class="muted small">Nestrādā Grafiki :(</p>
+          </div>
+        </label>
+      </div>
+
+      <p class="muted small" data-i18n="theme_auto_save">Saglabājas automātiski.</p>
+    </section>
+<br>
+    <section class="card glass elevate uniform-card">
+      <h2 data-i18n="basic_settings_heading">Pamata Iestatījumi</h2>
+      <form id="settingsForm" class="grid-2">
+        <label class="field">
+          <span data-i18n="currency_label">Valūta</span>
+          <select id="currency"></select>
+        </label>
+        <label class="field">
+          <span data-i18n="language_label">Valoda</span>
+          <select id="language">
+            <option value="lv">Latviešu (lv)</option>
+            <option value="en">English (en)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="adv_charts_label">Grafiki</span>
+          <select id="advCharts">
+            <option value="true" data-i18n="enabled">Ieslēgti</option>
+            <option value="false" data-i18n="disabled">Izslēgti</option>
+          </select>
+        </label>
+
+        <label class="field full">
+          <span>Abonements</span>
+          <div class="row wrap" style="gap:10px;">
+            <select id="settingsPlanSelect">
+              <option value="free">Free</option>
+              <option value="standard">Standard</option>
+              <option value="pro">Pro</option>
+            </select>
+            <button type="button" class="btn outline small" onclick="location.href='subscriptions.html'">Pārvaldīt</button>
+            <span id="settingsPlanStatus" class="muted small">Ielādē...</span>
+          </div>
+        </label>
+
+        <label class="field full">
+          <span>Paziņojumi</span>
+          <div class="row wrap" style="gap:10px;">
+            <select id="notifToggle">
+              <option value="off">Izslēgts</option>
+              <option value="on">Ieslēgts</option>
+            </select>
+            <button type="button" class="btn primary small" id="notifTest">Test paziņojums</button>
+            <span id="notifStatus" class="muted small">Nav pieprasīts.</span>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Automātiska Dzēšana (katru mēnesi)</span>
+          <div class="auto-purge-row" style="align-items:center;">
+            <label class="fancy-checkbox fancy-checkbox--compact perf-toggle" style="margin-right:8px;">
+              <input id="autoPurgeEnable" type="checkbox" aria-checked="false" />
+              <span class="fc-track"><span class="fc-knob" aria-hidden="true"></span></span>
+              <span class="fc-label">Automātiski</span>
+            </label>
+            <select id="autoPurgeType" title="Kādas transakcijas dzēst" style="min-width:180px; height:36px; padding:8px 10px; border-radius:8px;">
+              <option value="expense">Tikai izdevumi</option>
+              <option value="income">Tikai ienākumi</option>
+              <option value="both">Abi</option>
+            </select>
+            <button type="button" id="autoPurgeNow" class="btn danger small" style="height:36px; padding:8px 12px; border-radius:8px; margin-left:6px;">
+              Dzēst Tagad
+            </button>
+          </div>
+          <div style="margin-top:8px;">
+            <span class="auto-purge-last muted small">Pēdējā dzēšana: <span id="autoPurgeLast">—</span></span>
+          </div>
+        </label>
+
+        <div class="field full">
+          <button class="btn primary glow" type="submit" data-i18n="btn_save_settings">Saglabāt Iestatījumus</button>
+        </div>
+      </form>
+    </section>
+<br>
+    <section class="card glass elevate uniform-card">
+      <h2 data-i18n="transaction_categories_heading">Transakciju Kategorijas</h2>
+      <form id="categoryForm" class="row wrap">
+        <label class="field">
+          <span data-i18n="field_category_name">Nosaukums</span>
+          <input type="text" id="catName" required placeholder="Jauna kategorija">
+        </label>
+        <label class="field">
+          <span data-i18n="field_color">Krāsa</span>
+          <input type="color" id="catColor" value="#8a7dff">
+        </label>
+        <button class="btn primary glow" type="submit" data-i18n="btn_add_category">Pievienot</button>
+      </form>
+      <div id="catList" class="cat-list"></div>
+    </section>
+<br>
+    <section class="card glass elevate uniform-card">
+      <h2 data-i18n="planner_categories_heading">Plānotāja Kategorijas</h2>
+      <form id="plannerCatForm" class="row wrap">
+        <label class="field">
+          <span data-i18n="field_category_name">Nosaukums</span>
+          <input type="text" id="plannerCatName" required placeholder="Ceļojums / Ēdiens / Transport">
+        </label>
+        <label class="field">
+          <span data-i18n="field_color">Krāsa</span>
+          <input type="color" id="plannerCatColor" value="#ffc971">
+        </label>
+        <button class="btn primary glow" type="submit" data-i18n="btn_add_planner_cat">Pievienot Plāna Kat.</button>
+      </form>
+      <div id="plannerCatList" class="cat-list"></div>
+    </section>
+<br>
+  <section class="card glass elevate shimmer uniform-card">
+      <h2 data-i18n="data_export_heading">Datu Eksports</h2>
+      <div class="row wrap">
+        <button id="exportCSV" class="btn primary glow" data-i18n="btn_download_csv">Lejupielādēt CSV</button>
+        <button id="exportJSON" class="btn outline" data-i18n="btn_download_json">Lejupielādēt JSON</button>
+      </div>
+      <p class="muted small" data-i18n="export_future">Drīzumā: PDF, Excel, analītiskie atskaišu komplekti.</p>
+    </section>
+    
+    <footer class="footer global-footer">
+      <small>© <span id="yearSet"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('yearSet').textContent = new Date().getFullYear()
+  </script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+  <script type="module" src="guards.js"></script>
+  <script type="module" src="settings.js"></script>
+</body>
+</html>

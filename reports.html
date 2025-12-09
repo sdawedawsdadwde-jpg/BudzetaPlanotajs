@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Pārskati</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-grid"></div>
+  <div class="layer layer-aurora"></div>
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo"><path fill="#8a7dff" d="M3 13h2v8H3Zm4-6h2v14H7Zm4 3h2v11h-2Zm4-8h2v19h-2Zm4 11h2v8h-2Z"/></svg>
+      <h1>Pārskati</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html">Pārskats</a>
+      <a href="budgets.html">Mērķi</a>
+      <a href="reports.html" class="active">Pārskati</a>
+      <a href="planner.html">Plānotājs</a>
+      <a href="notes.html">Piezīmes</a>
+      <a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a>
+    </nav>
+    <div class="userbox">
+      <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail"></span>
+      <button id="logoutBtn" class="btn danger small">Izrakstīties</button> 
+    </div>
+  </header>
+  <main class="container wide with-footer">
+    <section class="grid-2 big-gap">
+      <div class="card glass elevate shimmer chart-card" id="cardMonthBar">
+        <h2>Ienākumi vs Izdevumi (mēneši)</h2>
+        <div class="chart-state" id="stateMonthBar">Ielādē...</div>
+        <div class="chart-placeholder" id="disabledMonthBar" style="display:none;">
+          <strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong>
+        </div>
+        <canvas id="monthBar" height="260" style="display:none;"></canvas>
+      </div>
+      <div class="card glass elevate shimmer chart-card" id="cardBalanceLine">
+        <h2>Kumulatīvā Bilance</h2>
+        <div class="chart-state" id="stateBalanceLine">Ielādē...</div>
+        <div class="chart-placeholder" id="disabledBalanceLine" style="display:none;">
+          <strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong>
+        </div>
+        <canvas id="balanceLine" height="260" style="display:none;"></canvas>
+      </div>
+    </section>
+    <br>
+    <section class="grid-2 big-gap">
+      <div class="card glass elevate chart-card" id="cardHeatmap">
+        <h2>Dienu Izdevumu Heatmap</h2>
+        <div class="chart-state" id="stateHeatmap">Ielādē...</div>
+        <div class="chart-placeholder" id="disabledHeatmap" style="display:none;">
+          <strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong>
+        </div>
+        <canvas id="heatmap" height="260" style="display:none;"></canvas>
+      </div>
+      <div class="card glass elevate chart-card" id="cardSummary">
+        <h2>Struktūras Apskats</h2>
+        <div id="summary" class="summary-grid"></div>
+        <div class="chart-state" id="stateSummary">Ielādē...</div>
+        <div class="chart-placeholder" id="disabledSummary" style="display:none;">
+          <strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong>
+        </div>
+      </div>
+    </section>
+    <footer class="footer global-footer">
+      <small>© <span id="yearRep"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('yearRep').textContent = new Date().getFullYear();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+   <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+   <script type="module" src="guards.js"></script>
+  <script type="module" src="reports.js"></script>
+</body>
+</html>

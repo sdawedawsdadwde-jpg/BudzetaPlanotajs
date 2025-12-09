@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Apkope</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-aurora"></div>
+  <main class="center-wrap">
+    <section class="card glass elevate shimmer" style="max-width:720px;">
+      <h1>Apkopes režīms</h1>
+      <p id="mText" class="subtitle lead">Sistēma īslaicīgi nepieejama. Lūdzu, mēģini vēlāk.</p>
+      <div class="row">
+        <button id="retry" class="btn primary">Pārlādēt</button>
+        <a href="help.html" class="btn outline">Palīdzība</a>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="firebase.js"></script>
+  <script type="module">
+    import { db } from "./firebase.js"
+    import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js"
+    const txt = document.getElementById("mText")
+    const retry = document.getElementById("retry")
+    retry.addEventListener("click", ()=> location.reload())
+    onValue(ref(db,"support/maintenance"), snap=>{
+      const v = snap.val() || {}
+      if (!v.enabled) location.replace("index.html")
+      txt.textContent = v.message || "Sistēma īslaicīgi nepieejama. Lūdzu, mēģini vēlāk."
+    })
+  </script>
+</body>
+</html>

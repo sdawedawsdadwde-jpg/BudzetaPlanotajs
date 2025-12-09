@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Abonementi</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css" />
+<style>
+  :root {
+    --panel-bg: transparent;
+    --panel-border: #ffffff14;
+    --panel-soft: #0b0f1a;
+  }
+
+  /* already-set globals kept */
+  .hero {
+    padding: 28px;
+    border-radius: 18px;
+    background: transparent;
+    border: 1px solid var(--panel-border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, #00e5ff22, transparent 45%);
+    pointer-events: none;
+  }
+
+  .badge-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .soft-badge {
+    padding:6px 12px; border-radius:999px;
+    background: #ffffff10; color:#eaf1ff; font-size:13px;
+    border:1px solid var(--panel-border);
+  }
+
+  .plan-grid { gap:18px; display:grid; grid-template-columns:1fr; }
+  .plan-card {
+    border:1px solid var(--panel-border);
+    background: transparent;
+    box-shadow: none;
+    padding: 18px;
+    border-radius: 14px;
+  }
+  .plan-card + .plan-card { margin-top: 6px; }
+  .plan-card[data-plan="pro"] { border-color:#00e5ff33; box-shadow:0 0 14px #00e5ff25; }
+
+  .price { font-size:26px; font-weight:800; margin:10px 0 12px; }
+  .pill {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 12px; border-radius:999px;
+    background:#ffffff10; color:#eaf1ff; font-size:13px;
+    border:1px solid var(--panel-border);
+  }
+  .pill.success { background:#00d68f20; color:#a8ffd9; }
+  .pill.warn { background:#ffb34722; color:#ffd9a1; }
+
+  /* Feature cards */
+  .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+  .mini-card {
+    padding:14px;
+    border-radius:14px;
+    background: transparent;          /* match section */
+    border:1px solid var(--panel-border);
+    box-shadow: none;
+  }
+
+  /* Comparison table */
+  .compare-table { width:100%; border-collapse:collapse; background: transparent; }
+  .compare-table th, .compare-table td {
+    padding:10px;
+    text-align:left;
+    border-bottom:1px solid var(--panel-border);
+  }
+  .compare-table th { color:#c8d4ff; }
+
+  /* CTA band */
+  .cta-band {
+    padding:16px 18px;
+    border-radius:14px;
+    background: transparent;
+    border:1px solid #00e5ff33;
+    display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+  }
+
+  /* Trust / badges */
+  .trust-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .trust-badge {
+    padding:8px 12px;
+    border-radius:10px;
+    background: transparent;
+    border:1px solid var(--panel-border);
+    font-size:13px; color:#cfd8ff;
+  }
+
+  /* Guarantee */
+  .guarantee {
+    padding:12px;
+    border-radius:12px;
+    background: transparent;
+    border:1px solid #00e5ff33;
+    color:#c2f3ff;
+  }
+
+  /* FAQ */
+  .faq { margin-top:14px; }
+  .faq details {
+    background: transparent;
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    padding:10px 14px;
+    margin-bottom:8px;
+  }
+  .faq summary { cursor:pointer; font-weight:600; color:#eaf1ff; }
+
+  /* Consistent spacing inside plan cards */
+  .plan-card h3 { margin: 6px 0; }
+  .plan-card p { margin: 4px 0 10px; }
+  .plan-card ul { margin: 0 0 12px 0; padding-left: 18px; color:#dbe2ff; }
+</style>
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-aurora"></div>
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo"><path fill="#00e5ff" d="M12 2 2 7l10 5 10-5-10-5Zm8 9-8 4-8-4v6l8 5 8-5v-6Z"/></svg>
+      <h1>Abonementi</h1>
+    </div>
+       <nav class="nav">
+      <a href="dashboard.html" data-i18n="nav_dashboard">Pārskats</a>
+      <a href="budgets.html" data-i18n="nav_goals">Mērķi</a>
+      <a href="reports.html" data-i18n="nav_reports">Pārskati</a>
+      <a href="planner.html" data-i18n="nav_planner">Plānotājs</a>
+      <a href="notes.html" data-i18n="nav_notes">Piezīmes</a>
+      <a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html" data-i18n="nav_settings">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a>
+    </nav>
+    <div class="userbox">
+      <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail"></span>
+      <button id="logoutBtn" class="btn danger small" data-i18n="logout_btn">Izrakstīties</button>
+    </div>
+  </header>
+
+  <main class="container narrow with-footer">
+    <section class="hero card glass elevate">
+      <div class="pill success">Nav reklāmu Pro un Standart</div>
+      <h2 style="margin:10px 0 6px;">Atbloķē mierīgu budžeta plānošanu</h2>
+      <p class="muted small">Droši maksājumi, tūlītēja aktivizācija un vairāk fokusa. Izvēlies plānu, kas atbilst tev.</p>
+      <div class="badge-row"> 
+        <span class="soft-badge">30 dienu derīgums katram pirkumam</span>
+        <span class="soft-badge">Prioritārs atbalsts</span>
+        <span class="soft-badge">Droši glabāti dati</span>
+      </div>
+    </section>
+
+    <section class="card glass elevate" id="planStatus" style="margin-top:16px;">
+      <h2>Pašreizējais plāns</h2>
+      <p class="muted small" id="currentPlan">Ielādē...</p>
+      <div id="proDownloads" style="display:none; margin-top:10px; gap:8px;" class="row wrap">
+        <button class="btn primary small">Lejupielādēt Android</button>
+        <button class="btn outline small">Lejupielādēt Windows</button>
+      </div>
+    </section>
+<br>
+
+    <section class="card glass elevate">
+      <div class="row" style="justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <h2>Izvēlies plānu</h2>
+        <div class="pill warn">Atlaide gada maksai – drīzumā</div>
+      </div>
+      <div class="plan-grid">
+        <div class="plan-card" data-plan="free">
+          <div class="pill" style="margin-bottom:8px;">Sākšanai</div>
+          <h3>Free</h3>
+          <p class="muted small">Reklāmas, pamata funkcijas.</p>
+          <div class="price">€0</div>
+          <ul class="muted small">
+            <li>Transakcijas un kategorijas</li>
+            <li>Pamata grafiki</li>
+            <li>Reklāmas redzamas</li>
+          </ul>
+          <button class="btn outline small select-plan" data-plan="free">Palikt pie Free</button>
+        </div>
+        <div class="plan-card" data-plan="standard">
+          <div class="pill success" style="margin-bottom:8px;">Labākais balanss</div>
+          <h3>Standard</h3>
+          <p class="muted small">Mazāk reklāmu, atgādinājumi.</p>
+          <div class="price">€4.99 / mēn</div>
+          <ul class="muted small">
+            <li>Rēķinu atgādinājumi</li>
+            <li>Reklāmu nav</li>
+            <li>Prioritārs atbalsts</li>
+          </ul>
+          <button class="btn primary small select-plan" data-plan="standard">Aktivizēt Standart</button>
+        </div>
+        <div class="plan-card" data-plan="pro">
+          <div class="pill success" style="margin-bottom:8px;">Pilns komplekts</div>
+          <h3>Pro</h3>
+          <p class="muted small">Bez reklāmām, premium priekšrocības.</p>
+          <div class="price">€9.99 / mēn</div>
+          <ul class="muted small">
+            <li>Bez reklāmām</li>
+            <li>Prioritāri atgādinājumi</li>
+            <li>Piejamas aplikācijas</li>
+          </ul>
+          <button class="btn primary glow small select-plan" data-plan="pro">Aktivizēt Pro</button>
+        </div>
+      </div>
+    </section>
+<br>
+
+    <section class="card glass elevate">
+      <div class="cta-band">
+        <div>
+          <strong>Vēlies vairāk fokusa?</strong><br>
+          <span class="muted small">Standart un Pro izslēdz reklāmas visā platformā.</span>
+        </div>
+        <button class="btn primary glow small select-plan" data-plan="pro">Pāriet uz Pro</button>
+      </div>
+    </section>
+<br>
+
+    <section class="card glass elevate">
+      <h2>Ko iegūsi</h2>
+      <div class="feature-grid">
+        <div class="mini-card">
+          <strong>Bez reklāmām</strong>
+          <p class="muted small">Tīrs interfeiss un mazāk traucējumu darbam ar budžetu.</p>
+        </div>
+        <div class="mini-card">
+          <strong>Atgādinājumi</strong>
+          <p class="muted small">Paziņojumi par rēķiniem un mērķiem, lai nekas neaizmirstas.</p>
+        </div>
+        <div class="mini-card">
+          <strong>Prioritārs atbalsts</strong>
+          <p class="muted small">Ātrāks reaģēšanas laiks un palīdzība, kad to vajag.</p>
+        </div>
+        <div class="mini-card">
+          <strong>Jaunu funkciju pieeja</strong>
+          <p class="muted small">Pro lietotāji saņem priekšskatījumus un agrīnas iespējas.</p>
+        </div>
+      </div>
+    </section>
+<br>
+
+    <section class="card glass elevate">
+      <h2>Salīdzini plānus</h2>
+      <table class="compare-table muted small">
+        <thead>
+          <tr>
+            <th>Funkcija</th>
+            <th>Free</th>
+            <th>Standard</th>
+            <th>Pro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Reklāmas</td><td>Ir</td><td>Nav</td><td>Nav</td></tr>
+          <tr><td>Rēķinu atgādinājumi</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Prioritārs atbalsts</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Jaunu funkciju priekšskatījumi</td><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><td>Lejupielādes (drīzumā)</td><td>—</td><td>—</td><td>✓</td></tr>
+        </tbody>
+      </table>
+    </section>
+<br>
+
+    <section class="card glass elevate">
+      <h2>Uzticība un drošība</h2>
+      <div class="trust-row">
+        <span class="trust-badge">Šifrēti dati?</span>
+        <span class="trust-badge">Droši maksājumi?</span>
+        <span class="trust-badge">No-ads garantija</span>
+        <span class="trust-badge">Atbalsts 24/7</span>
+      </div>
+      <div class="guarantee" style="margin-top:12px;">
+        Fakts: Ja kautkas nepatīk, nav manas problēmas.
+      </div>
+    </section>
+<br>
+
+    <section class="card glass elevate faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Kad plāns stājas spēkā?</summary>
+        <p class="muted small">Uzreiz pēc apstiprinājuma!</p>
+      </details>
+      <details>
+        <summary>Vai varu atgriezties uz Free?</summary>
+        <p class="muted small">Jā, vari jebkurā laikā pārslēgties uz Free plānu.</p>
+      </details>
+      <details>
+        <summary>Vai mani dati tiek dzēsti?</summary>
+        <p class="muted small">Nē. Plāna maiņa neietekmē transakcijas vai iestatījumus.</p>
+      </details>
+    </section>
+<br>
+
+    <section class="card glass elevate">
+      <div class="row" style="align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+          <h3>Jautājumi?</h3>
+          <p class="muted small">Raksti atbalstam — atbildam ātri visiem.</p>
+        </div>
+        <button class="btn outline small" onclick="location.href='help.html'">Sazināties ar atbalstu</button>
+      </div>
+    </section>
+
+    <footer class="footer global-footer">
+      <small>© <span id="yearSubs"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('yearSubs').textContent = new Date().getFullYear();
+  </script>
+   <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+    <script type="module" src="guards.js"></script>
+  <script type="module" src="subscriptions.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gudrais Pircējs</title>
+  <link rel="stylesheet" href="game3.css" />
+</head>
+<body>
+  <header>
+    <h1>Gudrais Pircējs</h1>
+    <p class="subtitle">Ļoti ierobežots budžets, straujas cenu svārstības, zems krājums un neparedzami notikumi — vai vari pabeigt sarakstu?</p>
+  </header>
+<a class="big-red-x-icon" href="game.html" aria-label="Go to game" title="Go to game">
+  <!-- X-only SVG using currentColor for easy tinting -->
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path d="M6.5 6.5 L17.5 17.5 M17.5 6.5 L6.5 17.5"
+          stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</a>
+  <main>
+    <section id="controls" class="card">
+      <div class="row">
+        <label>Režīms:
+          <select id="difficultySelect">
+            <option value="normal">Parasti</option>
+            <option value="hard">Grūti</option>
+            <option value="veryhard" selected>Ļoti Grūti</option>
+          </select>
+        </label>
+
+        <label>Budžets:
+          <input id="budgetInput" type="number" min="5" value="45" />
+        </label>
+
+        <label>Laiks (sek):
+          <input id="timeInput" type="number" min="30" value="120" />
+        </label>
+
+        <label>Kuponi:
+          <input id="couponInput" type="number" min="0" max="5" value="0" />
+        </label>
+
+        <label>Saraksta izmērs:
+          <input id="listSizeInput" type="number" min="3" max="10" value="6" />
+        </label>
+
+        <button id="startBtn" class="primary">Sākt spēli</button>
+        <button id="restartBtn" class="secondary">Atjaunot noklusējumu</button>
+      </div>
+
+      <div class="row small">
+        <span class="hint">Šī versija ir daudz grūtāka: svārstīgākas cenas, mazāks krājums, bargāks sods par impulsu un laika spiediens. Uzvarēt būs ļoti izaicinoši.</span>
+      </div>
+    </section>
+
+    <section id="status" class="card status-card">
+      <div class="row status-row">
+        <div><strong>Budžets:</strong> $<span id="budget">0</span></div>
+        <div><strong>Laiks:</strong> <span id="timeLeft">0</span>s</div>
+        <div><strong>Atlikušais:</strong> <span id="remainingCount">0</span></div>
+        <div><strong>Kuponi:</strong> <span id="couponsLeft">0</span></div>
+        <div><strong>Stratēģijas punkti:</strong> <span id="strategyPts">0</span></div>
+      </div>
+      <div id="message" class="message"></div>
+    </section>
+
+    <section id="game-area">
+      <aside id="shoppingList" class="card">
+        <h3>Tavs iepirkumu saraksts</h3>
+        <ul id="listItems"></ul>
+        <div class="row tips">
+          <small>Pabeidz sarakstu pirms laiks beidzas. Komplekts palīdz, bet to iegūšana būs grūta.</small>
+        </div>
+      </aside>
+
+      <section id="items" class="card">
+        <h3>Veikala preces</h3>
+        <div id="itemsGrid" class="grid"></div>
+      </section>
+
+      <aside id="cart" class="card">
+        <h3>Grozs</h3>
+        <ul id="cartItems"></ul>
+        <div class="row total">
+          <strong>Kopā iztērēts:</strong> $<span id="total">0</span>
+        </div>
+        <div class="row">
+          <button id="checkoutBtn" class="primary">Norēķināties</button>
+          <button id="undoBtn" class="secondary">Noņemt pēdējo</button>
+        </div>
+      </aside>
+    </section>
+
+    <section id="result" class="card hidden">
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <button id="playAgainBtn" class="primary">Spēlēt vēlreiz</button>
+    </section>
+  </main>
+
+  <footer>
+    <small>Gudrais Pircējs — izaicini sevi: katrs pirkums un sekunde ir svarīga.</small>
+  </footer>
+
+  <script src="game3.js"></script>
+</body>
+</html>

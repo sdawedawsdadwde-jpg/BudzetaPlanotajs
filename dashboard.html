@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="lv" data-lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pārskats</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/x-icon;base64,AAABAAEAICACAAAAAACoAgAAJgAAABAQAAABACAAqBAAAI4EAAAoAAAAEAAAACAAAAABACAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A">
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <div class="layer layer-grid"></div>
+  <div class="layer layer-aurora"></div>
+  <canvas id="particles"></canvas>
+
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo spin"><path fill="#00e5ff" d="M12 2 2 7l10 5 10-5-10-5Zm8 9-8 4-8-4v6l8 5 8-5v-6Z"/></svg>
+      <h1 data-i18n="nav_budget_planning">Budžeta Plānošana</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" class="active" data-i18n="nav_dashboard">Pārskats</a>
+      <a href="budgets.html" data-i18n="nav_goals">Mērķi</a>
+      <a href="reports.html" data-i18n="nav_reports">Pārskati</a>
+      <a href="planner.html" data-i18n="nav_planner">Plānotājs</a>
+      <a href="notes.html" data-i18n="nav_notes">Piezīmes</a>
+       <a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html" data-i18n="nav_settings">Iestatījumi</a>
+      <a href="help.html">Palīdzība</a>
+    </nav>
+    <div class="userbox">
+      <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail" class="user"></span>
+      <button id="logoutBtn" class="btn danger small" data-i18n="logout_btn">Izrakstīties</button>
+    </div>
+  </header>
+
+  <main class="container wide with-footer">
+    <section class="card glass elevate" id="advicePanel" style="margin-bottom:38px; display:none;">
+      <h2>Gudrie budžeta ieteikumi</h2>
+      <div id="adviceList"></div>
+    </section>
+
+    <section class="stats super-grid">
+      <div class="stat-card glass mega-glow shimmer">
+        <h3 data-i18n="stat_income">Ienākumi</h3>
+        <div id="incomeTotal" class="big money plus">€0.00</div>
+      </div>
+      <div class="stat-card glass mega-glow shimmer">
+        <h3 data-i18n="stat_expense">Izdevumi</h3>
+        <div id="expenseTotal" class="big money minus">€0.00</div>
+      </div>
+      <div class="stat-card glass mega-glow shimmer">
+        <h3 data-i18n="stat_balance">Bilance</h3>
+        <div id="balanceTotal" class="big money">€0.00</div>
+      </div>
+      <div class="stat-card glass mega-glow shimmer">
+        <h3 data-i18n="stat_month_trend">Mēneša Tendence</h3>
+        <div id="trend" class="trendTag neutral">STABILS</div>
+      </div>
+    </section>
+
+    <section class="grid-2 big-gap align-stretch">
+      <form id="txForm" class="card glass elevate shimmer stretch">
+        <h2 data-i18n="add_transaction">Pievienot Transakciju</h2>
+        <div class="row">
+          <label class="field"><span data-i18n="field_type">Tips</span>
+            <select id="type" required>
+              <option value="income" data-i18n="option_income">Ienākumi</option>
+              <option value="expense" data-i18n="option_expense">Izdevumi</option>
+            </select>
+          </label>
+          <label class="field"><span data-i18n="field_category">Kategorija</span>
+            <select id="category" required></select>
+          </label>
+        </div>
+        <small class="muted small" data-i18n="category_custom_hint">Iestatījumos vari pievienot savas kategorijas.</small>
+        <br>
+        <div class="quickline">
+          <span class="muted small">Ātrā izvēle:</span>
+          <div class="chips" id="popularCats">
+            <button type="button" class="chip" data-cat="Alga">Alga</button>
+            <button type="button" class="chip" data-cat="Mājoklis">Mājoklis</button>
+            <button type="button" class="chip" data-cat="Ēdiens">Ēdiens</button>
+            <button type="button" class="chip" data-cat="Transports">Transports</button>
+            <button type="button" class="chip" data-cat="Izklaide">Izklaide</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="field"><span data-i18n="field_amount">Summa</span>
+            <input type="number" id="amount" min="0" step="0.01" required placeholder="0.00">
+          </label>
+          <label class="field"><span data-i18n="field_date">Datums</span>
+            <input type="date" id="date" required>
+          </label>
+        </div>
+        <label class="field"><span data-i18n="field_notes">Piezīmes</span>
+          <input type="text" id="notes" placeholder="Papildus info">
+        </label>
+        <div class="row">
+          <button type="submit" class="btn primary glow" id="saveBtn" data-i18n="btn_save">Saglabāt</button>
+          <button type="button" class="btn outline" id="resetBtn" data-i18n="btn_clear">Notīrīt</button>
+        </div>
+        <input type="hidden" id="editingId" />
+      </form>
+
+      <div class="card glass elevate shimmer stretch" id="categoryChartWrap">
+        <h2 data-i18n="chart_expense_by_category">Izdevumi pa kategorijām</h2>
+        <div class="chart-placeholder" id="chartsDisabledMsg" style="display:none;"><strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong></div>
+        <canvas id="categoryChart" height="240"></canvas>
+      </div>
+    </section>
+<br>
+    <section class="grid-3 big-gap" id="advancedChartsSection">
+      <div class="card glass elevate stretch">
+        <h2 data-i18n="chart_daily_trend">Dienas Tendance</h2>
+        <div class="chart-placeholder adv-off" style="display:none;"><strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong></div>
+        <canvas id="dailyLine" height="200"></canvas>
+      </div>
+      <div class="card glass elevate stretch">
+        <h2 data-i18n="chart_cumulative">Kumulatīvie Ienākumi vs Izdevumi</h2>
+        <div class="chart-placeholder adv-off" style="display:none;"><strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong></div>
+        <canvas id="stackedArea" height="200"></canvas>
+      </div>
+      <div class="card glass elevate stretch">
+        <h2>Struktūras Radars</h2>
+        <div class="chart-placeholder adv-off" style="display:none;"><strong data-i18n="charts_disabled">Grafiki ir izslēgti</strong></div>
+        <canvas id="radarChart" height="200"></canvas>
+      </div>
+    </section>
+<br>
+    <section class="grid-2 big-gap align-stretch">
+      <div class="card glass elevate stretch">
+        <h2>Cenu vērošanas saraksts</h2>
+        <form id="watchForm" class="grid-2">
+          <label class="field">
+            <span>Prece</span>
+            <input id="watchName" type="text" required placeholder="AirPods / krēsls">
+          </label>
+          <label class="field">
+            <span>Pašreizējā cena</span>
+            <input id="watchCurrent" type="number" min="0" step="0.01" placeholder="123.00">
+          </label>
+          <label class="field">
+            <span>Vēlamā cena</span>
+            <input id="watchTarget" type="number" min="0" step="0.01" placeholder="99.00">
+          </label>
+          <label class="field full">
+            <span>Piezīme</span>
+            <input id="watchNote" type="text" placeholder="Krāsa / modelis">
+          </label>
+          <div class="field full">
+            <button class="btn primary glow" type="submit">Pievienot</button>
+          </div>
+        </form>
+        <div id="watchList" class="list-col"></div>
+      </div>
+    </section>
+<br>
+    <section class="card glass elevate">
+      <div class="toolbar">
+        <h2 data-i18n="transactions_heading">Transakcijas</h2>
+        <div class="row wrap">
+          <label class="field small">
+            <span data-i18n="filter_type">Tips</span>
+            <select id="filterType">
+              <option value="all" data-i18n="option_all">Visi / Visas</option>
+              <option value="income" data-i18n="option_income">Ienākumi</option>
+              <option value="expense" data-i18n="option_expense">Izdevumi</option>
+            </select>
+          </label>
+          <label class="field small">
+            <span data-i18n="filter_category">Kategorija</span>
+            <select id="filterCategory">
+              <option value="all" data-i18n="option_all">Visi / Visas</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="table-wrap sleek-scroll">
+        <table class="table lux">
+          <thead>
+            <tr>
+              <th data-i18n="col_date">Datums</th>
+              <th data-i18n="col_type">Tips</th>
+              <th data-i18n="col_category">Kategorija</th>
+              <th data-i18n="col_notes">Piezīmes</th>
+              <th class="right" data-i18n="col_amount">Summa</th>
+              <th data-i18n="col_actions">Darbības</th>
+            </tr>
+          </thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+    </section>
+    <footer class="footer global-footer">
+      <small>© <span id="yearDash"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script> 
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+    <script type="module" src="guards.js"></script>
+  <script>
+    document.getElementById('yearDash').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

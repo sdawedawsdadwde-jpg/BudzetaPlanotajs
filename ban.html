@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Restricted</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-enter center-wrap">
+  <div class="card glass mega-glow" style="max-width:520px; text-align:center;">
+    <h1 class="title">Access restricted</h1>
+    <p class="subtitle lead">Your account is currently banned. Please contact support for details.</p>
+    <p class="note">If you believe this is a mistake, its not.</p>
+    <button id="logoutBtn" class="btn danger" style="margin-top:12px;">Log out</button>
+  </div>
+
+  <script type="module">
+    import { auth } from './firebase.js';
+    import { signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    const btn = document.getElementById('logoutBtn');
+    btn?.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = 'index.html';
+      } catch (e) {
+        alert('Logout failed: ' + (e?.message || e));
+      }
+    });
+  </script>
+</body>
+</html>

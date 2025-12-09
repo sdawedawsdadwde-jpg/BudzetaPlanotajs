@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Palīdzība</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="system-guard.css">
+</head>
+<body class="theme-dark cosmic-bg page-enter">
+  <header class="topbar glass deep">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 24 24" class="logo">
+        <path fill="#00e5ff" d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm1 15h-2v-2h2Zm0-4h-2a1 1 0 0 1-1-1 3 3 0 1 1 5-2h-2a1 1 0 1 0-2 0c0 .551.449 1 1 1a3 3 0 0 1 3 3 1 1 0 0 1-1 1Z"/>
+      </svg>
+      <h1>Palīdzība</h1>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html">Pārskats</a>
+      <a href="budgets.html">Mērķi</a>
+      <a href="reports.html">Pārskati</a>
+      <a href="planner.html">Plānotājs</a>
+      <a href="notes.html">Piezīmes</a>
+<a href="social.html">Sociālie Tīkli</a>
+      <a href="settings.html">Iestatījumi</a>
+      <a href="help.html" class="active">Palīdzība</a>
+    </nav>
+    <div class="userbox">
+       <button id="openSubsBtn" class="btn primary glow small" style="display:none;">Abonementi</button>
+      <span id="userEmail"></span>
+      <button id="logoutBtn" class="btn danger small">Izrakstīties</button>
+    </div>
+  </header>
+
+  <main class="container narrow with-footer"> 
+    <!-- FAQ -->
+    <section class="card glass elevate shimmer">
+      <h2>Bieži uzdotie jautājumi (FAQ)</h2>
+      <p class="muted small">Šeit atradīsi atbildes uz biežākajiem jautājumiem par budžeta plānošanas lietotni, datiem un atbalsta čatu.</p>
+
+      <div class="faq-item">
+        <h3>Kas ir šī lietotne?</h3>
+        <p>Budžeta plānošanas rīks: transakcijas, mērķi, pārskati, plānotājs un piezīmes – visi dati piesaistīti tavam kontam.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Kā pievienot savas kategorijas?</h3>
+        <p>Iestatījumi → Transakciju Kategorijas (vai Plānotāja Kategorijas). Pēc pievienošanas tās būs redzamas “Pievienot transakciju” formā.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Kāpēc neredzu grafikus?</h3>
+        <p>Pārbaudi Iestatījumos “Papildu Grafiki” ir ieslēgti. Pievieno vismaz vienu transakciju ar derīgu datumu (YYYY-MM-DD).</p>
+      </div>
+      <div class="faq-item">
+        <h3>Vai varu mainīt valodu un valūtu?</h3>
+        <p>Jā. Iestatījumi → Valoda / Valūta. Pēc saglabāšanas interfeiss atsvaidzinās.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Kā saglabājas Piezīmes un Plānotājs?</h3>
+        <p>Pēc “Saglabāt” / “Izveidot” nospiešanas ieraksts nonāk tavā kontā (Firebase Realtime Database). Pārlādējot tās paliks.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Kā saņemt palīdzību?</h3>
+        <p>Sazinies ar atbalsta aģentu caur zemāk esošo čatu.</p>
+      </div>
+
+      <details class="faq-details">
+        <summary><strong>Papildu jautājumi</strong></summary>
+        <div class="faq-item">
+          <h4>Vai mani dati ir droši?</h4>
+          <p>Visi dati glabājas Firebase (Google). Piekļuve tiek kontrolēta ar drošības noteikumiem; citi lietotāji tos neredz.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Kā darbojas atbalsta čats?</h4>
+          <p>Privāta istaba: <code>user_tavsUID</code>. Tu raksti ziņu → aģents redz un atbild. Dzēšot ziņas aģenta pusē tās pazūd arī tavā skatā.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Vai var sūtīt failus?</h4>
+          <p>Pašlaik – tikai teksts. Ja vajag failu atbalstu, paziņo; to var pievienot (Firebase Storage).</p>
+        </div>
+        <div class="faq-item">
+          <h4>Kāpēc redzu “Apkopes režīms”?</h4>
+          <p>Aģents ir ieslēdzis uzturēšanu. Funkcionalitāte var būt ierobežota līdz izslēgšanai.</p>
+        </div>
+      </details>
+    </section>
+<br>
+    <!-- Čats -->
+    <section class="card glass elevate" id="supportChat">
+      <div class="maintenance-banner" id="helpMaintenanceBanner" style="display:none;"></div>
+      <h2>Atbalsta čats</h2>
+      <div id="loginPrompt" class="muted small" style="display:none;">
+        Lai čatotu, lūdzu <a href="index.html">piesakies</a>.
+      </div>
+      <div id="chatStatus" class="muted small">Savienojums...</div>
+      <div id="chatMessages" class="chat-messages sleek-scroll"></div>
+      <form id="chatForm" class="chat-form" style="display:none;">
+        <input id="chatInput" type="text" placeholder="Raksti ziņu..." autocomplete="off" required />
+        <button type="submit" class="btn primary small">Sūtīt</button>
+      </form>
+      <div class="chat-hint muted small">
+        Aģents var nebūt tiešsaistē uzreiz. Ziņas saglabājas.
+      </div>
+    </section>
+
+    <footer class="footer global-footer">
+     <small>© <span id="yearHelp"></span><span> Matīss Gromovs</span> </small>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('yearHelp').textContent = new Date().getFullYear();
+  </script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="common.js"></script>
+  <script type="module" src="subscription-guard.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="particles.js"></script>
+  <script type="module" src="maintenance-guard.js"></script>
+  <script type="module" src="system-guard.js"></script>
+  <script type="module" src="./graph-guard.js"></script>
+  <script type="module" src="graph-toggle.js"></script>
+  <script type="module" src="advice.js"></script>
+  <script type="module" src="addons.js"></script>
+  <script type="module" src="ads.js"></script>
+  <script type="module" src="notif.js"></script>
+   <script type="module" src="guards.js"></script>
+  <script type="module" src="help.js"></script>
+</body>
+</html>
